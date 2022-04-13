@@ -23,6 +23,10 @@ var/
 .spyproject
 .pylint.d
 
+# CATS Specific
+underlying data/
+results/
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

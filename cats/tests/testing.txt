@@ -1,0 +1,156 @@
+
+Constraint Info
+
+FeedstockConstraint: Virgin Oils_1600: 3433264.702352234. Dual: 0.0
+FeedstockConstraint: Waste Oils_500: 493057.0. Dual: -1406.4043174192996
+FeedstockConstraint: Waste Oils_525: 27423.0. Dual: -1381.4043174192996
+FeedstockConstraint: Waste Oils_550: 26147.0. Dual: -1356.4043174192996
+FeedstockConstraint: Waste Oils_575: 24985.0. Dual: -1331.4043174192993
+FeedstockConstraint: Waste Oils_600: 23921.0. Dual: -1306.4043174192993
+FeedstockConstraint: Waste Oils_625: 22944.0. Dual: -1281.4043174192996
+FeedstockConstraint: Waste Oils_650: 22044.0. Dual: -1256.4043174192993
+FeedstockConstraint: Waste Oils_675: 21212.0. Dual: -1231.4043174192996
+FeedstockConstraint: Waste Oils_700: 20441.0. Dual: -1206.4043174192996
+FeedstockConstraint: Waste Oils_725: 19723.0. Dual: -1181.4043174192996
+FeedstockConstraint: Waste Oils_750: 19055.0. Dual: -1156.4043174192996
+FeedstockConstraint: Waste Oils_775: 18430.0. Dual: -1131.4043174192996
+FeedstockConstraint: Waste Oils_800: 17845.0. Dual: -1106.4043174192996
+FeedstockConstraint: Waste Oils_825: 17295.0. Dual: -1081.4043174192996
+FeedstockConstraint: Waste Oils_850: 16779.0. Dual: -1056.4043174192998
+FeedstockConstraint: Waste Oils_875: 16293.0. Dual: -1031.4043174192993
+FeedstockConstraint: Waste Oils_900: 15834.0. Dual: -1006.4043174192994
+FeedstockConstraint: Waste Oils_925: 15400.0. Dual: -981.4043174192993
+FeedstockConstraint: Waste Oils_950: 14989.0. Dual: -956.4043174192994
+FeedstockConstraint: Waste Oils_975: 14600.0. Dual: -931.4043174192994
+FeedstockConstraint: Waste Oils_1000: 14230.0. Dual: -906.4043174192994
+FeedstockConstraint: Waste Oils_1025: 13879.0. Dual: -881.4043174192996
+FeedstockConstraint: Waste Oils_1050: 13544.0. Dual: -856.4043174192996
+FeedstockConstraint: Waste Oils_1075: 13225.0. Dual: -831.4043174192994
+FeedstockConstraint: Waste Oils_1100: 12921.0. Dual: -806.4043174192994
+FeedstockConstraint: Waste Oils_1125: 12631.0. Dual: -781.4043174192996
+FeedstockConstraint: Waste Oils_1150: 12353.0. Dual: -756.4043174192994
+FeedstockConstraint: Waste Oils_1175: 12088.0. Dual: -731.4043174192994
+FeedstockConstraint: Waste Oils_1200: 11833.0. Dual: -706.4043174192994
+FeedstockConstraint: Waste Oils_1225: 11589.0. Dual: -681.4043174192994
+FeedstockConstraint: Waste Oils_1250: 11355.0. Dual: -656.4043174192993
+FeedstockConstraint: Waste Oils_1275: 11130.0. Dual: -631.4043174192994
+FeedstockConstraint: Waste Oils_1300: 10914.0. Dual: -606.4043174192994
+FeedstockConstraint: Waste Oils_1325: 10706.0. Dual: -581.4043174192994
+FeedstockConstraint: Waste Oils_1350: 10506.0. Dual: -556.4043174192996
+FeedstockConstraint: Waste Oils_1375: 10313.0. Dual: -531.4043174192996
+FeedstockConstraint: Waste Oils_1400: 10127.0. Dual: -506.40431741929956
+FeedstockConstraint: Waste Oils_1425: 9948.0. Dual: -481.40431741929956
+FeedstockConstraint: Waste Oils_1450: 9775.0. Dual: -456.4043174192995
+FeedstockConstraint: Waste Oils_1475: 9608.0. Dual: -431.40431741929973
+FeedstockConstraint: Waste Oils_1500: 9446.0. Dual: -406.4043174192996
+FeedstockConstraint: Waste Oils_1525: 9290.0. Dual: -381.4043174192996
+FeedstockConstraint: Waste Oils_1550: 9139.0. Dual: -356.40431741929933
+FeedstockConstraint: Waste Oils_1575: 8993.0. Dual: -331.4043174192995
+FeedstockConstraint: Waste Oils_1600: 8851.0. Dual: -306.40431741929945
+FeedstockConstraint: Dairy Gas_20: 7086241.0. Dual: -85.51061348450082
+FeedstockConstraint: Dairy Gas_30: 6768816.0. Dual: -75.51061348450081
+FeedstockConstraint: Dairy Gas_50: 740666.0. Dual: -55.51061348450084
+FeedstockConstraint: Dairy Gas_75: 9354.0. Dual: -30.51061348450083
+FeedstockConstraint: Electricity_75: 0.0. Dual: 0.0
+FeedstockConstraint: Corn_7: 541239631.6652329. Dual: 0.0
+FeedstockConstraint: Oil_90: 418839010.20185804. Dual: 0.0
+FeedstockConstraint: Natural Gas_6: 186230.2530805687. Dual: 0.0
+FeedstockConstraint: Landfills_7: 23022861.72227488. Dual: 0.0
+FeedstockConstraint: CCS_0: 0.0. Dual: 0.0
+FeedstockConstraint: Propane_18: 0.0. Dual: 0.0
+FeedstockConstraint: Additional Credits_0: 0.0. Dual: 0.0
+FuelDemandRequirement: CNG: 31500000000.0. Dual: -0.36175268877307776
+FuelDemandRequirement: Diesel: 538625699614.0001. Dual: 0.02384333561864071
+FuelDemandRequirement: Gasoline: 1683608503632.0. Dual: 0.024792161736907906
+FuelDemandRequirement: DACCS: 0.0. Dual: 0.0
+FuelDemandRequirement: HDV-H2: 0.0. Dual: -0.005172550782482475
+FuelDemandRequirement: Propane: 0.0. Dual: 0.0
+FuelDemandRequirement: Jet Fuel: 7120144049.824946. Dual: 0.0
+FuelDemandRequirement: LDV-e: 8197475352.000001. Dual: -0.12810172332104955
+FuelDemandRequirement: LDV-H2: 196472917.0. Dual: -0.023080415353017324
+FuelDemandRequirement: Additional Credits: 0.0. Dual: 0.0
+CI Constraint_total: -7.09405867382884e-10. Dual: 344.574177339956
+CI Constraint_Risk 3: 13268095.692019686. Dual: 0.0
+CI Constraint_Risk 2: 5234667.94310329. Dual: 0.0
+CI Constraint_Risk 1: 1100016.5687511729. Dual: 0.0
+CI Constraint_Default: -20081371.203874152. Dual: 0.0
+CI Constraint_HRI + FCI Credits: 130000.0. Dual: 0.0
+CI Constraint_Incremental Deficits: 0.0. Dual: 0.0
+CI Constraint_Fixed Guideway: 55113.0. Dual: 0.0
+CI Constraint_Forklift Credits: 232595.0. Dual: 0.0
+CI Constraint_Other offroad: 60883.0. Dual: 0.0
+BlendMinimum: EthanolBlend_Gasoline (0.0633, 0.0704): -11953620375.7872. Dual: 0.0
+BlendMaximum: EthanolBlend_Gasoline (0.0633, 0.0704): -1.52587890625e-05. Dual: -0.01744682831511901
+BlendMinimum: BiodieselBlend_Diesel (0.0, 0.052): 0.0. Dual: 0.0
+BlendMaximum: BiodieselBlend_Diesel (0.0, 0.052): -28008536379.928005. Dual: 0.0
+FuelSupplyGrowthConstraint(ProductionLimit): E85: 5000000000.0. Dual: -0.003446828315119003
+FuelSupplyGrowthConstraint(ProductionLimit): Ethanol w. CCS: 1600000000.0. Dual: -0.012404670384238403
+Coproduct Constraint_Renewable Diesel_Alt Jet: -1.9073486328125e-06. Dual: -0.014634616705782528
+Coproduct Constraint_Renewable Diesel_Renewable Gasoline: -2.2798776626586914e-06. Dual: 0.002471667776725098
+
+Variable Values
+
+CreditVariable: HRI + FCI Credits: 130000.0
+CreditVariable: Fixed Guideway: 55113.0
+CreditVariable: Forklift Credits: 232595.0
+CreditVariable: Other offroad: 60883.0
+Renewable Diesel_Virgin Oils_1600: 3016894.1839565765
+Renewable Gasoline_Virgin Oils_1600: 208185.25919782894
+Alt Jet_Virgin Oils_1600: 208185.2591978289
+Renewable Diesel_Waste Oils_500: 493057.0
+Renewable Diesel_Waste Oils_525: 27423.0
+Renewable Diesel_Waste Oils_550: 26147.0
+Renewable Diesel_Waste Oils_575: 24985.0
+Renewable Diesel_Waste Oils_600: 23921.0
+Renewable Diesel_Waste Oils_625: 22944.0
+Renewable Diesel_Waste Oils_650: 22044.0
+Renewable Diesel_Waste Oils_675: 21212.0
+Renewable Diesel_Waste Oils_700: 20441.0
+Renewable Diesel_Waste Oils_725: 19723.0
+Renewable Diesel_Waste Oils_750: 19055.0
+Renewable Diesel_Waste Oils_775: 18430.0
+Renewable Diesel_Waste Oils_800: 17845.0
+Renewable Diesel_Waste Oils_825: 17295.0
+Renewable Diesel_Waste Oils_850: 16779.0
+Renewable Diesel_Waste Oils_875: 16293.0
+Renewable Diesel_Waste Oils_900: 15834.0
+Renewable Diesel_Waste Oils_925: 15400.0
+Renewable Diesel_Waste Oils_950: 14989.0
+Renewable Diesel_Waste Oils_975: 14600.0
+Renewable Diesel_Waste Oils_1000: 14230.0
+Renewable Diesel_Waste Oils_1025: 13879.0
+Renewable Diesel_Waste Oils_1050: 13544.0
+Renewable Diesel_Waste Oils_1075: 13225.0
+Renewable Diesel_Waste Oils_1100: 12921.0
+Renewable Diesel_Waste Oils_1125: 12631.0
+Renewable Diesel_Waste Oils_1150: 12353.0
+Renewable Diesel_Waste Oils_1175: 12088.0
+Renewable Diesel_Waste Oils_1200: 11833.0
+Renewable Diesel_Waste Oils_1225: 11589.0
+Renewable Diesel_Waste Oils_1250: 11355.0
+Renewable Diesel_Waste Oils_1275: 11130.0
+Renewable Diesel_Waste Oils_1300: 10914.0
+Renewable Diesel_Waste Oils_1325: 10706.0
+Renewable Diesel_Waste Oils_1350: 10506.0
+Renewable Diesel_Waste Oils_1375: 10313.0
+Renewable Diesel_Waste Oils_1400: 10127.0
+Renewable Diesel_Waste Oils_1425: 9948.0
+Renewable Diesel_Waste Oils_1450: 9775.0
+Renewable Diesel_Waste Oils_1475: 9608.0
+Renewable Diesel_Waste Oils_1500: 9446.0
+Renewable Diesel_Waste Oils_1525: 9290.0
+Renewable Diesel_Waste Oils_1550: 9139.0
+Renewable Diesel_Waste Oils_1575: 8993.0
+Renewable Diesel_Waste Oils_1600: 8851.0
+RNG_Dairy Gas_30: 6084938.182938388
+RNG_Dairy Gas_50: 740666.0
+RNG_Dairy Gas_75: 9354.0
+LDV-e (Dairy Gas)_Dairy Gas_20: 7086241.0
+LDV-e (Dairy Gas)_Dairy Gas_30: 683877.8170616125
+Ethanol_Corn_7: 512321181.6941514
+E85_Corn_7: 21907916.64475875
+Ethanol w. CCS_Corn_7: 7010533.3263228
+Gasoline_Oil_90: 331333970.75453
+Diesel_Oil_90: 87505039.44732802
+LDV Hydrogen-CCS_Natural Gas_6: 186230.2530805687
+RNG_Landfills_7: 23022861.72227488
