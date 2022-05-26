@@ -67,7 +67,7 @@ def run(verbose = False, disableautoincrement=False):
                 model.save_results()
 
             if model.status == model.solver.INFEASIBLE:
-                print("A constraint was specified that cannot be met.  Results are not being saved.")
+                print("\n\n A constraint was specified that cannot be met.  Results are not being saved.")
                 print("\n\nExiting Model")
                 return
 

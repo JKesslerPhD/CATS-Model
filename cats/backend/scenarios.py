@@ -15,6 +15,7 @@
 
 import configparser
 import os
+import re
 
 class GetScenarios():
     def __init__(self, filepath='config.ini'):
@@ -139,7 +140,14 @@ class GetScenarios():
             scenario_list = [x.strip() for x in scenarios.split(",")]
 
         for scenario in scenario_list:
-            file_path = os.path.join(self.scenario_folder,scenario,"scenario_inputs.xlsx")
+            pattern = "scenario_inputs.*\.xlsx"
+            filenames = next(os.walk(os.path.join(self.scenario_folder,scenario)), (None, None, []))[2]  # [] if no file
+
+            for file in filenames:
+                if re.match(pattern, file):
+                    break
+
+            file_path = os.path.join(self.scenario_folder,scenario, file)
 
             results_path = os.path.join(self.results_folder,scenario)
             if os.path.exists(file_path):

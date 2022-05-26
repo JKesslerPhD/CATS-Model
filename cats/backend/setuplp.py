@@ -96,11 +96,18 @@ class Model():
         """
 
         try:
-            self._default_production_limit = float(limit)
-        except ValueError as error:
-            raise ValueError("The provided limit is not a valid decimal value") from error
+            if limit:
+                self._default_production_limit = float(limit)
+        except ValueError:
+                self._default_production_limit = 0
 
-    def show_solutions(self, to_text=None):
+    def save_as_mps(self, filename=""):
+        results = self.solver.ExportModelAsMpsFormat(False, False)
+        with open(filename, 'w') as f:
+            f.write(results)
+
+
+    def show_solutions(self, to_text=None, save_mps=False):
         output = ""
         output+="\nConstraint Info\n"
         c_res = self.solver.ComputeConstraintActivities()
@@ -118,6 +125,8 @@ class Model():
             with open(to_text, 'w') as f:
                 f.write(output)
             return "Output printed to file {}".format(to_text)
+        if save_mps:
+            self.save_as_mps("mps_"+to_text)
 
         return output
 
@@ -130,6 +139,9 @@ class Model():
         for fuel, feedstocks in self.variables["feedstock"].items():
             quantity = 0
             for feedstock, prices in feedstocks.items():
+                if feedstock == "slack":
+                    continue
+
                 yields = pathways.get(feedstock, fuel).yields
                 key = fuel
                 if disaggregate_feedstock:
@@ -166,7 +178,8 @@ class Model():
                 raise Exception("Model could not be resolved.  There is likely an issue with the magnitude of units being analyzed.  Try aggregating inputs and changing units to reduce the range of magnitude (e.g. fewer zeroes)")
             print("\n\nThe model precision requirements could not be met.  This happens because there are too many zeroes for the range of input units (e.g. MJ) versus million tons. Adjusting tolerance and trying again")
             self._set_tolerance()
-            return self.optimize(year)
+
+            return self.optimize(year, increment_time)
 
         print("Model Solved...")
         return self.status
@@ -187,6 +200,8 @@ class Model():
         units = self.results["Units"]
         emissions = {}
         results_dict = self.results[self._year] = {}
+        constraint_results = self.solver.ComputeConstraintActivities()
+
 
         for fuel, feedstock_dict in self.variables['feedstock'].items():
 
@@ -200,6 +215,15 @@ class Model():
                 quantity = 0
                 carbon = 0
                 energy = 0
+
+                if feedstock == "slack":
+                    if prices.SolutionValue() > 0:
+                        print("\n\n\t Fuel Production Volumes are Constrained.  The model is adding a slack variable to relax this constraint.  Price estimates are unreliable.")
+                        category[aggregator] = "RelaxedConstraint"
+                        units[aggregator] = prices.name()
+                        results_dict[aggregator] = prices.SolutionValue()
+                    continue
+                    # Need to add some logic here for slack variables
 
                 pw = pathways.get(feedstock, fuel)
 
@@ -238,12 +262,27 @@ class Model():
             units[fuel + " Cost"] = "$/GGE"
 
         for c_name, constraint in self.constraints["ci"].items():
-            results_dict[c_name] = int(constraint.DualValue())
-            category[c_name] = "Credit Price"
-            units[c_name] = "$/ton"
+            if not isinstance(c_name, str):
+                raise Exception("There was en error saving results.  Please check your results output paramaters in the scenario_input file.")
+
+            if c_name == "total":
+                results_dict[c_name] = int(constraint.DualValue())
+                category[c_name] = "Credit Price"
+                units[c_name] = "$/ton"
+            else:
+                results_dict[c_name] = int(constraint.DualValue())
+                category[c_name] = "Credit Differential"
+                units[c_name] = "$/ton"
+
+            results_dict[c_name + " credit quantity"] = int(constraint_results[constraint.index()])
+            category[c_name + " credit quantity"] = "Credits"
+            units[c_name + " credit quantity"] = "tons"
 
         for key, ci_dict in emissions.items():
+            if not isinstance(key, str):
+                raise Exception("There was en error saving results.  Please check your results output paramaters in the scenario_input file.")
             name = key + " Avg CI"
+
             try:
                 results_dict[name] = round(ci_dict["carbon"]/ci_dict["energy"],2)
                 category[name] = "Carbon Intensity"
@@ -336,9 +375,15 @@ class Model():
 
                 if fuel not in self.variables["feedstock"]:
                     self.variables["feedstock"][fuel] = {}
+                    slack = self.solver.NumVar(0, float('inf'), "{}_slack".format(feedstock.name))
+                    self.variables["feedstock"][fuel]["slack"] = slack
+                    self.objective.SetCoefficient(slack, 100000)
+
 
                 if feedstock.name not in self.variables["feedstock"][fuel]:
                     self.variables["feedstock"][fuel][feedstock.name] = []
+
+
 
                 for price, supply in feedstock:
                     constraint_name = "{}_{}".format(feedstock.name, price)
@@ -352,8 +397,10 @@ class Model():
                     name = "{}_{}_{}".format(fuel, feedstock.name, price)
                     fs = self.solver.NumVar(0, supply, name)
 
+
                     # Add the variable to the model dictionary
                     self.variables["feedstock"][fuel][feedstock.name].append(fs)
+
 
                     # Cost ($/ton) = Conversion Cost ($/ton) + Feedstock Cost ($/ton) - Subsidy ($/MJ) * yield (MJ/ton)
                     cost = pathway.conversioncost + price - pathway.subsidy*pathway.yields
@@ -376,8 +423,10 @@ class Model():
     def _set_supply_constraint(self):
         self.constraints["supply"] = {}
         pct_change = self._default_production_limit
-
         for fuel in self.data.fuels.values():
+            minimum = 0
+            maximum = 0
+
             try:
                 min_value, attribution = fuel.supply[self._year]
             except KeyError:
@@ -390,6 +439,7 @@ class Model():
                     attribution = "ProductionLimit"
             except KeyError:
                 max_value = float('inf')
+
 
             if min_value == 0 and max_value == float('inf') and fuel.name not in self._prior_solution:
                 continue
@@ -404,7 +454,9 @@ class Model():
                     old_value = prior_min/(1 - self._default_production_limit)
                     prior_min = (1-pct_change)*old_value
                     #Maximum value is at least a 200 MM GGE/yr facility
-                    prior_max = max((1+pct_change)*old_value, 200*1e6*115.83)
+                    prior_max = max((1+pct_change)*old_value, 50*1e6*115.83)
+                else:
+                    continue
 
                 minimum = max(min_value, prior_min)
                 maximum = min(max_value, prior_max)
@@ -418,6 +470,7 @@ class Model():
             if minimum == 0 and maximum == 0:
                 print("Avoiding minimum constraint for {}".format(fuel.name))
             else:
+                print("Setting Constraint for {}: {},{} ".format(fuel.name, minimum, maximum))
                 self.constraints["supply"][fuel.name] = self.solver.Constraint(minimum, maximum, "FuelSupplyGrowthConstraint({}): {}".format(attribution, fuel.name))
 
 
@@ -565,13 +618,14 @@ class Model():
 
             try:
                 constraint_args["fuel_constraint"] = self.constraints["supply"][fuel]
+
             except KeyError:
                 constraint_args["fuel_constraint"] = None
 
-
-
-
             for fstck, prices in feedstock_list.items():
+                if fstck == "slack":
+                    continue
+
                 pathway = pathways.get(fstck, fuel)
                 # adds coefficients to each constraint affiliated
                 # with the feedstock price and production pathway
@@ -582,6 +636,10 @@ class Model():
         fuel_constraint = constraints["fuel_constraint"]
         blend_list = self.data.blend_list(self._year)
         blend_pools = {x.fuelpool.name for x in blend_list}
+
+        if fuel_constraint:
+            slack = self.variables["feedstock"][pathway.fuel.name]["slack"]
+            fuel_constraint.SetCoefficient(slack, -pathway.yields)
 
         # Setting up relevant variables if there are coproducts
         if constraints["coproducts"]:
@@ -594,6 +652,7 @@ class Model():
 
             if fuel_constraint:
                 fuel_constraint.SetCoefficient(fs_price_var, pathway.yields)
+
 
             # Add coefficients to any blend pool constraints that exist
             if fuelpool in blend_pools:

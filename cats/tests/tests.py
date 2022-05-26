@@ -112,7 +112,7 @@ class DataMethods(unittest.TestCase):
 
         # Load data for one specific scenario
 
-        d = Loader(slist["BAUScenario"])
+        d = Loader(slist["Alt1"])
         d.load()
         m = Model(d)
 
