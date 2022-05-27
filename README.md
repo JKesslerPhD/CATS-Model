@@ -45,7 +45,7 @@ pip install -r requirements.txt
 Data for each scenario must be input into the model using a `scenario_inputs.xlsx` workbook located in the scenario directory.  
 
 > Note that the `scenario_inputs` file name may contain additional
-wildcard inputs so long as the naming structure is as follows: `scenario_inputs*.xlsx`
+wildcard inputs so long as the naming structure is as follows: `scenario_inputs*.xlsx`.
 Ensure that only one such file is contained in a given scenario directory.  Example file name:  `scenario_inputs_BAUScenario.xlsx`
 
 To generate a new scenario template for a scenario named `testing`, run the following:
