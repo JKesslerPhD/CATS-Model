@@ -422,8 +422,8 @@ class Model():
 
     def _set_supply_constraint(self):
         self.constraints["supply"] = {}
-        pct_change = self._default_production_limit
         for fuel in self.data.fuels.values():
+            pct_change = self._default_production_limit
             minimum = 0
             maximum = 0
 
@@ -455,8 +455,8 @@ class Model():
                     prior_min = (1-pct_change)*old_value
                     #Maximum value is at least a 200 MM GGE/yr facility
                     prior_max = max((1+pct_change)*old_value, 50*1e6*115.83)
-                else:
-                    continue
+             #   else:
+             #       continue
 
                 minimum = max(min_value, prior_min)
                 maximum = min(max_value, prior_max)

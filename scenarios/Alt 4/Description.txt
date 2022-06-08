@@ -1,4 +1,0 @@
-- Crop-type Credits are limited.
-- Crop-type fuels cannot be deficit generators
-- LCFS goes to 0% by 2045
-- Dairy Gas ineligible after 2030

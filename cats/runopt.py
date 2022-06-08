@@ -68,7 +68,7 @@ def run(verbose = False, disableautoincrement=False):
 
             if model.status == model.solver.INFEASIBLE:
                 print("\n\n A constraint was specified that cannot be met.  Results are not being saved.")
-                print("\n\nExiting Model")
+                print("\n\nModel runs could not complete. Exiting Model")
                 return
 
             if model.status == model.solver.ABNORMAL:

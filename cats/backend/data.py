@@ -72,9 +72,9 @@ class Template():
                         "Policy Attribution":[]},
 
                     "Coproducts": {
-                        "Fuel",
-                        "Base Fuel",
-                        "Production Multiplier"},
+                        "Fuel":[],
+                        "Base Fuel":[],
+                        "Production Multiplier":[]},
 
 
                     "Fuel Production": {

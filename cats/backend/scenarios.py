@@ -141,6 +141,7 @@ class GetScenarios():
 
         for scenario in scenario_list:
             pattern = "scenario_inputs.*\.xlsx"
+            file="scenario_inputs.xlsx"
             filenames = next(os.walk(os.path.join(self.scenario_folder,scenario)), (None, None, []))[2]  # [] if no file
 
             for file in filenames:
