@@ -18,7 +18,7 @@
 ### Model Explanation ###
 #########################
 # Variables are the amount of feedstock used to generate fuel for a specific
-# fuel pathway pathway at a specific feedstock price
+# fuel pathway at a specific feedstock price
 # Minimize total cost of fuel supply, subject to constraints
 
 # Constraints:
@@ -26,12 +26,8 @@
         # Fuel Pool CI does not exceed LCFS Constraint
         # Credit types generated do not exceed credit amount constraint
         # Fuel pool supply >= Fuel Demand
+        # Blending constraints (e.g. E10) and co-product constraints (e.g. AJF as pct of RD)
 
-# Tests to Run:
-    # Make sure supply constraints in a given year do not exceed limit constraints
-
-# Still to implement:
-# * Reading model outputs and generating past-year data.
 
 from ortools.linear_solver import pywraplp
 
@@ -65,7 +61,6 @@ class Model():
         #       * Define Feedstock Constraints:
         #               sum(Feedstock_p) < total
         #
-        # Constraints Feedstock Constraint
 
     def get_year(self):
         if self.status == None:
@@ -176,7 +171,7 @@ class Model():
         if self.status == self.solver.ABNORMAL:
             if self._tolerance > 10:
                 raise Exception("Model could not be resolved.  There is likely an issue with the magnitude of units being analyzed.  Try aggregating inputs and changing units to reduce the range of magnitude (e.g. fewer zeroes)")
-            print("\n\nThe model precision requirements could not be met.  This happens because there are too many zeroes for the range of input units (e.g. MJ) versus million tons. Adjusting tolerance and trying again")
+            print("\n\nThe model precision requirements could not be met.  This happens because there are too many zeroes for the range of input units (e.g. MJ versus million tons). Adjusting tolerance and trying again")
             self._set_tolerance()
 
             return self.optimize(year, increment_time)
@@ -189,11 +184,6 @@ class Model():
             self.results = {}
             self.results["Category"] = {}
             self.results["Units"] = {}
-
-        #TODO: Add in results saving to move things out of MJ values
-        #   Results should have a results aggregator name
-        #   Results should have a conversion factor (like yield)
-        #   Results should have a unit label
 
         pathways = self.data.get_production(self._year)
         category = self.results["Category"]
@@ -297,7 +287,7 @@ class Model():
     def _calculate_incremental_limits(self, threshold = 1e9):
         #Zeroing Out Threshold: 1e9 MJ, or about 10 million GGE per year
 
-        # Need to grab any banked credits as well!
+        # Does not currently bring forward banked credits from prior years
         resolved_supply = self.calculate_fuel_supply()
         limits = {}
         for fuel, value in resolved_supply.items():
@@ -455,8 +445,6 @@ class Model():
                     prior_min = (1-pct_change)*old_value
                     #Maximum value is at least a 200 MM GGE/yr facility
                     prior_max = max((1+pct_change)*old_value, 50*1e6*115.83)
-             #   else:
-             #       continue
 
                 minimum = max(min_value, prior_min)
                 maximum = min(max_value, prior_max)
@@ -466,7 +454,7 @@ class Model():
 
             if minimum > maximum:
                 raise Exception("The model will be unable to converge, because {} has a minimum fuel requirement that exceeds that maximum fuel of that type allowed".format(fuel.name))
-            # Also need logic for historic values
+
             if minimum == 0 and maximum == 0:
                 print("Avoiding minimum constraint for {}".format(fuel.name))
             else:
