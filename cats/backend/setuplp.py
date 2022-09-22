@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2021 California Air Resources Board
+# Copyright 2022 California Air Resources Board
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -116,6 +116,8 @@ class Model():
             if variable.SolutionValue() != float(0):
                 output+="\n{}: {}".format(variable.name(), variable.SolutionValue())
 
+        output+="\n{}: {}".format("Objective Function Value", self.objective.Value())
+
         if to_text:
             with open(to_text, 'w') as f:
                 f.write(output)
@@ -179,7 +181,7 @@ class Model():
         print("Model Solved...")
         return self.status
 
-    def save_results(self):
+    def save_results(self, verbose=False):
         if not self.results:
             self.results = {}
             self.results["Category"] = {}
@@ -247,6 +249,7 @@ class Model():
                 emissions[aggregator]["energy"] += energy
 
         for fuel, constraint in self.constraints["demand"].items():
+            # If constraint is non-binding, needs to be not written
             results_dict[fuel + " Cost"] = round(float(constraint.DualValue())*115.83,2)
             category[fuel + " Cost"] = "Marginal Cost"
             units[fuel + " Cost"] = "$/GGE"
@@ -267,6 +270,11 @@ class Model():
             results_dict[c_name + " credit quantity"] = int(constraint_results[constraint.index()])
             category[c_name + " credit quantity"] = "Credits"
             units[c_name + " credit quantity"] = "tons"
+
+        if verbose:
+            results_dict["Objective Function"] = self.objective.Value()
+            category["Objective Function"] = "Total Fuel Supply Costs"
+            units["Objective Function"] = "USD"
 
         for key, ci_dict in emissions.items():
             if not isinstance(key, str):

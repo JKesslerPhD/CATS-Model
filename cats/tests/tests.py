@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2021 California Air Resources Board
+# Copyright 2022 California Air Resources Board
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -106,13 +106,13 @@ class DataMethods(unittest.TestCase):
         import os
         from cats.backend.setuplp import Model
 
-        conf = os.path.abspath(os.path.join(os.path.dirname(cats.__file__),"..","config.ini"))
+        conf = os.path.abspath(os.path.join(os.path.dirname(cats.__file__),"..","config_example.ini"))
         # Get list of Scenarios
         slist = GetScenarios(conf)
 
         # Load data for one specific scenario
 
-        d = Loader(slist["Alt1"])
+        d = Loader(slist["Test"])
         d.load()
         m = Model(d)
 
@@ -154,7 +154,7 @@ class DataMethods(unittest.TestCase):
         import cats
         import os
 
-        conf = os.path.abspath(os.path.join(os.path.dirname(cats.__file__),"..","config.ini"))
+        conf = os.path.abspath(os.path.join(os.path.dirname(cats.__file__),"..","config_example.ini"))
         # Get list of Scenarios
         slist = GetScenarios(conf)
 

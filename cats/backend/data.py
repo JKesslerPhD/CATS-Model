@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-The California Transportation Supply (CATS) model.
-This is the database layer to interact with the user inputs and to generate
-a python class structure to read the data
-"""
 
-# Copyright 2021 California Air Resources Board
+# Copyright 2022 California Air Resources Board
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +13,12 @@ a python class structure to read the data
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+"""
+The California Transportation Supply (CATS) model.
+This is the database layer to interact with the user inputs and to generate
+a python class structure to read the data
+"""
 
 import os
 import math
@@ -84,10 +85,13 @@ class Template():
                         "Feedstock":[],
                         "Conversion Cost":[],
                         "Units Notes":[],
-                        "EER":[],
+
                         "Conversion Yield":[],
                         "Conversion Units":[],
                         "Carbon Intensity":[],
+                        "Units":[],
+                        "EER":[],
+                        "Refernces":[],
                         "Exogenous Subsidy":[],
                         "Subsidy Unit Notes":[],
                         "Credit Type":[],

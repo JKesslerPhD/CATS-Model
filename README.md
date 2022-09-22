@@ -58,7 +58,7 @@ python -m cats -t testing
 ```
 This indicates that you will be running the CATS module (`-m` flag) from the `c:\CATS model` directory.  You have specified the `-t` flag to create a new template named `testing`. A `scneario_inputs.xlsx` file will be created for you with the correct headings and worksheets in the `testing` folder located in the scenario directory that is specified in the `config.ini` configuration.
 
-To run this scenario, make sure it is correctly specified in the `config.ini` file before you run the model.
+To run this scenario, make sure it is correctly specified in the `config.ini` file before you run the model.  A `config_example.ini` file is provided by default.  This file can be copied and renamed to `config.ini`.
 
 > **Important Information About Inputs:** For some of the scenario inputs, the model will use the closest date value provided, while for other inputs the value will be `None` unless specified.  The `FuelProduction` pathways do not need to be defined for each year, the closest value will be used in the model.  If yields or CI change, however, then a new production pathway should be provided for that year.  Each Energy Demand `FuelPool` will also use the value provided from the closest year. For instance, if a value for 2040 is provided, and no `FuelPool` is provided in 2020, then the energy demand in 2020 for that `FuelPool` will be equal to the 2040 energy demand value. `LCFS` benchmarks will use the closest year entered. All other worksheets will only use the values entered for a given year.  As such, things like blend requirements must be entered annually.
 

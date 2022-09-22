@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 California Air Resources Board
+# Copyright 2022 California Air Resources Board
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ def run(verbose = False, disableautoincrement=False):
                 if verbose:
                     print("\nSaving Solutions to file {}".format(results_name))
                     model.show_solutions("results/{}/{}".format(scenario, results_name))
-                model.save_results()
+                model.save_results(verbose)
 
             if model.status == model.solver.INFEASIBLE:
                 print("\n\n A constraint was specified that cannot be met.  Results are not being saved.")
