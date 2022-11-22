@@ -37,7 +37,6 @@ from cats.backend.datatypes import BlendRequirement
 from cats.backend.datatypes import Coproducts
 
 
-
 class Template():
     def __init__(self, scenario_folder, scenario_name):
         self.workbook = os.path.join(scenario_folder, scenario_name, "scenario_inputs.xlsx")
@@ -75,7 +74,8 @@ class Template():
                     "Coproducts": {
                         "Fuel":[],
                         "Base Fuel":[],
-                        "Production Multiplier":[]},
+                        "Production Multiplier":[],
+                        "Exceed":[]},
 
 
                     "Fuel Production": {
@@ -296,9 +296,6 @@ class Loader():
 
         """
 
-        #TODO: add something to verify LCFS benchmarks exist for pathways
-        # add something to verify blend production can be met
-
         for fuelpool in self.demand.keys():
             valid_paths = ProductionPathway.get_fuel_pool(fuelpool, year)
             if not valid_paths:
@@ -313,7 +310,6 @@ class Loader():
 
     def _load_lcfs(self, xls):
         for _, row in xls.iterrows():
-            # Think about fuel pool vs compliance pool
             year = validate_numeric(row["Year"])
             benchmark = row["Benchmark"]
             standard = validate_float(row["Standard"])
@@ -404,6 +400,10 @@ class Loader():
             fuel = row["Fuel"]
             basefuel = row["Base Fuel"]
             multiplier = row["Production Multiplier"]
+            try:
+                exceed = row["Exceed"]
+            except:
+                exceed = False
 
             if fuel not in self.fuels:
                 raise KeyError("{} is not a valid fuel.  Cannot be defined as a coproduct of {}".format(fuel, basefuel))
@@ -411,7 +411,7 @@ class Loader():
             if basefuel not in self.fuels:
                 raise KeyError("{} is not a valid base fuel.  {} cannot be defined as a coproduct.".format(basefuel, fuel))
 
-            Coproducts.add_coproduct(fuel, basefuel, multiplier)
+            Coproducts.add_coproduct(fuel, basefuel, multiplier, exceed)
 
     @staticmethod
     def _load_fuelsupply(xls):
@@ -426,6 +426,8 @@ class Loader():
 
             try:
                 f = Fuel.get(fuel)
+                if f is None:
+                    raise KeyError
                 f.add_supply(year, amount, policy)
             except KeyError as error:
                 raise KeyError("Unable to add supply. Please add '{}' as a fuel to the module first".format(fuel)) from error

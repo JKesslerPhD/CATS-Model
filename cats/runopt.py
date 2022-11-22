@@ -74,5 +74,6 @@ def run(verbose = False, disableautoincrement=False):
             if model.status == model.solver.ABNORMAL:
                 print("The model was unable to converge.  An abnormal solution resulted. Try adjusting unit magnitudes for inputs")
             df = pd.DataFrame.from_dict(model.results)
+            df.index.name = "Variable"
             print("Model results saved to '{}.xlsx'".format(scenario))
             df.to_excel("results/{}.xlsx".format(scenario))

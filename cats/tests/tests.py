@@ -169,12 +169,6 @@ class DataMethods(unittest.TestCase):
         if slist.production_change:
             m.set_default_production(slist.production_change)
 
-
-""" def test_incremental_constraints():
-     for fuel, constraint in m.constraints["supply"].items():
-         print("{} Range: {} - {}".format(fuel, constraint.Lb(), constraint.Ub()))
- """
-
 if __name__ == '__main__':
     unittest.main(verbosity=2)
 

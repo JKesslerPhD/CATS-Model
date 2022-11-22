@@ -30,6 +30,8 @@ results/
 scenarios/*
 !scenarios/Test/
 !scenarios/Test/*
+!scenarios/Reference/*
+!scenarios/Reference
 config.ini
 
 # Installer logs

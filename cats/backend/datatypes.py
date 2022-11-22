@@ -138,10 +138,11 @@ class FuelPool():
 
 class Coproducts():
     coproducts = {}
-    def __init__(self, fuel, basefuel, multiplier):
+    def __init__(self, fuel, basefuel, multiplier, exceed = False):
         self.fuel = Fuel.get(fuel)
         self.basefuel = Fuel.get(basefuel)
         self.multiplier = multiplier
+        self.exceed = exceed
 
     @classmethod
     def __iter__(cls):
@@ -156,11 +157,11 @@ class Coproducts():
         return cls.coproducts.items()
 
     @classmethod
-    def add_coproduct(cls, fuel, basefuel, multiplier):
+    def add_coproduct(cls, fuel, basefuel, multiplier, exceed = False):
         try:
             return cls.coproducts[basefuel][fuel]
         except KeyError:
-            coproduct = cls(fuel, basefuel, multiplier)
+            coproduct = cls(fuel, basefuel, multiplier, exceed)
 
             if basefuel not in cls.coproducts:
                 cls.coproducts[basefuel] = {}
@@ -185,6 +186,14 @@ class Coproducts():
     def get_multiplier(cls, fuel, basefuel):
         try:
             return cls.coproducts[basefuel][fuel].multiplier
+
+        except KeyError:
+            return None
+
+    @classmethod
+    def get_exceed(cls, fuel, basefuel):
+        try:
+            return cls.coproducts[basefuel][fuel].exceed
 
         except KeyError:
             return None
@@ -270,11 +279,11 @@ class ProductionPathway():
             try:
                 cost = int((float(conversioncost) + float(price))/yields)
                 supply_curve[cost] = yields*supply
-            except ZeroDivisionError:
-                raise Exception("Error adding {} to at conversion cost {} \
+            except ZeroDivisionError as error:
+                raise ZeroDivisionError("Error adding {} to at conversion cost {} \
                                  and price {} to \
                                  supply due to yield {}".format(fs.name, \
-                                     conversioncost, price, yields))
+                                     conversioncost, price, yields)) from error
         return supply_curve
 
     def update(self, conversioncost, yields, carbon, credit_type):

@@ -82,7 +82,7 @@ class GetScenarios():
                                'all' needs to be defined.") from error
 
     def get_model_years(self, scenario):
-        #return a list of all the years to load
+        # return a list of all the years to load
         year_list = {}
         for _, scen in self.scenarios.items():
             try:
@@ -114,7 +114,7 @@ class GetScenarios():
                                 config file was invalid. {}".format(string)) from error
             years = list(range(minimum, maximum))
 
-        #check to get full years
+        # check to get full years
         return_years = []
         for year in years:
             try:

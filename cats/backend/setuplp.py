@@ -33,7 +33,6 @@ from ortools.linear_solver import pywraplp
 
 class Model():
     def __init__(self, data):
-        # Move instance attributes to dictionaries (tolerance, default production limit)
         self.solver = pywraplp.Solver("CATS Instance",pywraplp.Solver.GLOP_LINEAR_PROGRAMMING)
         self.objective = self.solver.Objective()
         self.objective.SetMinimization()
@@ -52,7 +51,7 @@ class Model():
         if data._status == "NO DATA":
             raise Exception("The data variable passed to the model does not contain data.")
 
-        # Sequence:
+        # Description of sequence:
         #   * Loop through production pathways
         #       * Define variable: Quantity Fuel
         #          set objective function: min(Total Cost):
@@ -94,7 +93,7 @@ class Model():
             if limit:
                 self._default_production_limit = float(limit)
         except ValueError:
-                self._default_production_limit = 0
+            self._default_production_limit = 0
 
     def save_as_mps(self, filename=""):
         results = self.solver.ExportModelAsMpsFormat(False, False)
@@ -164,8 +163,6 @@ class Model():
         # Adds the model constraints
         print("Adding constraints...")
 
-
-
         self._add_constraints()
 
         # Solves the linear programming problem
@@ -215,7 +212,6 @@ class Model():
                         units[aggregator] = prices.name()
                         results_dict[aggregator] = prices.SolutionValue()
                     continue
-                    # Need to add some logic here for slack variables
 
                 pw = pathways.get(feedstock, fuel)
 
@@ -249,7 +245,6 @@ class Model():
                 emissions[aggregator]["energy"] += energy
 
         for fuel, constraint in self.constraints["demand"].items():
-            # If constraint is non-binding, needs to be not written
             results_dict[fuel + " Cost"] = round(float(constraint.DualValue())*115.83,2)
             category[fuel + " Cost"] = "Marginal Cost"
             units[fuel + " Cost"] = "$/GGE"
@@ -293,9 +288,8 @@ class Model():
 
 
     def _calculate_incremental_limits(self, threshold = 1e9):
-        #Zeroing Out Threshold: 1e9 MJ, or about 10 million GGE per year
-
-        # Does not currently bring forward banked credits from prior years
+        # Zeroing Out Threshold: 1e9 MJ, or about 10 million GGE per year
+        # Note: does not currently bring forward banked credits from prior years
         resolved_supply = self.calculate_fuel_supply()
         limits = {}
         for fuel, value in resolved_supply.items():
@@ -352,13 +346,12 @@ class Model():
                 if supply > 0:
                     self.variables["credits"][credit.name] = self.solver.NumVar(0, supply, "CreditVariable: {}".format(credit.name))
                 else:
-                    self.variables["credits"][credit.name] = self.solver.NumVar(-supply, float('inf'), "CreditVariable: {}".format(credit.name))
+                    self.variables["credits"][credit.name] = self.solver.NumVar(-1*supply, float('inf'), "CreditVariable: {}".format(credit.name))
 
         self.constraints["feedstock"] = {}
         for feedstock in self.data.feedstocks.values():
 
             # Set feedstock supply constraint
-
             # Get set of fuels that can use the feedstock
             try:
                 fuels = self.data.productionpathways[feedstock.name]
@@ -451,7 +444,7 @@ class Model():
                 if pct_change != 0:
                     old_value = prior_min/(1 - self._default_production_limit)
                     prior_min = (1-pct_change)*old_value
-                    #Maximum value is at least a 200 MM GGE/yr facility
+                    #Maximum value hard coded as at least a 200 MM GGE/yr facility
                     prior_max = max((1+pct_change)*old_value, 50*1e6*115.83)
 
                 minimum = max(min_value, prior_min)
@@ -558,8 +551,6 @@ class Model():
                     c_name = pw.credit.name
                     coef = (ci - pw.ci/pw.eer) * pw.yields*1e-6*pw.eer
 
-                    #print("adding CI constraint for {}. Coef: {}.  Benchmark: {}, PW CI: {}".format(fstck_var.name(),
-                    #                                                                                coef, ci, pw.ci))
                     if coef < 0:
                         self.deficit_fuels.append(fstck_var)
 
@@ -578,8 +569,12 @@ class Model():
         for basefuel, fuel_list in coproducts.items():
             self.constraints["coproduct"][basefuel] = {}
             for fuel in fuel_list:
+                if coproducts.get_exceed(fuel, basefuel):
+                    minimum = float('-inf')
+                else:
+                    minimum = 0
                 self.constraints["coproduct"][basefuel][fuel] = \
-                    self.solver.Constraint(0, 0, \
+                    self.solver.Constraint(minimum, 0, \
                                            "Coproduct Constraint_{}_{}".format(basefuel,fuel))
 
 
@@ -656,7 +651,7 @@ class Model():
 
             if constraints["coproducts"]:
                 # set coefficient for Basefuel vs Non-base for coproducts
-                # Constraint:  [Base Fuel]*multiplier - [Fuel] = 0
+                # Constraint:  [Base Fuel]*multiplier - [Fuel] <= 0
                 # Coeficient is: -1 if not-base, or the multiplier if base
 
                 if not basefuels:
@@ -710,9 +705,6 @@ class Model():
                 max_coef = 1 + max_coef
 
             min_c.SetCoefficient(fs_price_var, pathway.yields*min_coef)
-
-            # TODO: Will need to add a coefficient for a variable to overcome the blendwall constraint
-            # if option is checked to make problem feasible
             max_c.SetCoefficient(fs_price_var, pathway.yields*max_coef)
 
     def set_year(self, year):
