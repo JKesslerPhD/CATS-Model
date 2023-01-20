@@ -404,7 +404,8 @@ class Model():
         self.constraints["demand"] = {}
 
         for pool_name, demand in self.data.demand.items():
-            if demand.exceed:
+            if demand.exceed(self._year):
+                print("Model allowed to exceed fuel pool demand for {pool_name} in {self._year}")
                 maximum = float('inf')
             else:
                 maximum = demand[self._year]

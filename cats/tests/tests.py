@@ -15,7 +15,16 @@
 
 import unittest
 
+from cats import runopt
+
+try:
+    runopt.generate_template("Test")
+    print("Test input file created.")
+except:
+    print("Test file inputs already exist and will not be overwritten.")
+
 class DataMethods(unittest.TestCase):
+
 
     def test_fuel_pool(self):
         from cats.backend.data import FuelPool
@@ -146,7 +155,6 @@ class DataMethods(unittest.TestCase):
         assert fuel in Coproducts.which_basefuel(cp)
 
 
-
     def _test_increment_model_run(self):
         from cats.backend.scenarios import GetScenarios
         from cats.backend.data import Loader
@@ -160,7 +168,7 @@ class DataMethods(unittest.TestCase):
 
         # Load data for one specific scenario
 
-        d = Loader(slist["default"])
+        d = Loader(slist["Test"])
         d.load()
         m = Model(d)
 

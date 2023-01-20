@@ -25,7 +25,6 @@ class Fuel():
         self.name = name
         self.limits = {}
         self.benchmark = None
-        # Can force instatiation of FuelPool instead.  Not sure I want to do that?
         if fuelpool not in FuelPool.pools:
             raise TypeError("Specified Fuel Pool '{}' has not been defined try {}".format(fuelpool,
                                                                               list(FuelPool.pools)))
@@ -92,11 +91,18 @@ class FuelPool():
     def __init__(self, name):
         self.name = name
         self.demand = {}
-        self.exceed = False
+        self._exceed = {}
         self.years = self.keys()
 
     def __repr__(self):
         return self.name
+
+    def exceed(self, year):
+        try:
+            return self._exceed[closest_value(year, self.years)]
+        except:
+                return False
+
 
     @classmethod
     def add_pool(cls, name):
@@ -117,7 +123,7 @@ class FuelPool():
 
     def add_demand(self, year, amount, exceed=False):
         self.demand[year] = amount
-        self.exceed = exceed
+        self._exceed[year] = exceed
 
     def __getitem__(self, year):
         year = closest_value(year, self.demand.keys())

@@ -349,7 +349,7 @@ class Loader():
         for _, row in xls.iterrows():
             f = FuelPool.add_pool(row["Fuel Pool"])
             energy = validate_numeric(row["Energy"])/1
-            limit = row["Exceed?"]
+            limit = bool(row["Exceed?"])
             f.add_demand(row["Year"], energy, limit)
             if f.name not in self.demand:
                 self.demand[f.name] = f
