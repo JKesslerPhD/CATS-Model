@@ -122,6 +122,12 @@ class Template():
                         "Minimum":[],
                         "Maximum":[]},
 
+                    "Feedstock Limits":{
+                        "Year":[],
+                        "Feedstock Name":[],
+                        "Maximum":[]},
+
+
                     "Additional Credits":{
                         "Year":[],
                         "Credit Type":[],
@@ -255,6 +261,7 @@ class Loader():
             creditsupply = pd.read_excel(rd, "Additional Credits")
             blends = pd.read_excel(rd, "Blend Requirements")
             coproducts = pd.read_excel(rd, "Coproducts")
+            fstcklimits = pd.read_excel(rd, "Feedstock Limits")
         except PermissionError as error:
             raise PermissionError("One or more sheets could not be read in the configuration file.  Make sure '{}' is closed before continuing".format(rd)) from error
 
@@ -269,6 +276,7 @@ class Loader():
             self._load_creditsupply(creditsupply)
             self._load_blends(blends)
             self._load_coproducts(coproducts)
+            self._load_feedstocklimits(fstcklimits)
 
         except Exception as e:
             print("The scenario tempalate is corrupt or invalid.  Data could not be loaded. {}".format(e))
@@ -343,6 +351,19 @@ class Loader():
 
             c = Credit.get(credit)
             c.add_limit(year, minimum, maximum)
+
+    @staticmethod
+    def _load_feedstocklimits(xls):
+        if xls.empty:
+            return
+
+        for _, row in xls.iterrows():
+            year = validate_numeric(row["Year"])
+            fstck = row["Feedstock Name"]
+            maximum = validate_bounds(row["Maximum"])
+
+            f = Feedstock.get(fstck)
+            f.add_limit(year, maximum)
 
 
     def _load_fuelpools(self, xls):

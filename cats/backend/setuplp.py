@@ -351,12 +351,21 @@ class Model():
         self.constraints["feedstock"] = {}
         for feedstock in self.data.feedstocks.values():
 
+            # Logic to have maximum feedstock limit defined
+            try:
+                flimit = feedstock.limits[self._year]
+                f_tot = self.solver.Constraint(0, flimit, "FeedstockConstraintTotal: {}".format(feedstock.name))
+            except:
+                flimit = None
+
             # Set feedstock supply constraint
             # Get set of fuels that can use the feedstock
             try:
                 fuels = self.data.productionpathways[feedstock.name]
             except KeyError:
                 fuels = []
+
+
 
             for fuel in fuels:
                 pathway = pathways.get(feedstock.name, fuel)
@@ -398,6 +407,10 @@ class Model():
                     self.objective.SetCoefficient(fs, cost)
                     fs_c.SetCoefficient(fs, 1)
 
+                    # Limits the total feedstock that can be used in a given year if a limit is set
+                    if flimit:
+                        f_tot.SetCoefficient(fs, 1)
+
     def _set_demand_constraint(self):
         #Setup Demand Pool Constraints.  Ensures that the fuel energy supply is >= the demand in a given fuel pool
 
@@ -405,7 +418,7 @@ class Model():
 
         for pool_name, demand in self.data.demand.items():
             if demand.exceed(self._year):
-                print("Model allowed to exceed fuel pool demand for {pool_name} in {self._year}")
+                print("Model allowed to exceed fuel pool demand for {} in {}".format(pool_name, self._year))
                 maximum = float('inf')
             else:
                 maximum = demand[self._year]
@@ -577,7 +590,6 @@ class Model():
                 self.constraints["coproduct"][basefuel][fuel] = \
                     self.solver.Constraint(minimum, 0, \
                                            "Coproduct Constraint_{}_{}".format(basefuel,fuel))
-
 
     def _add_constraints(self):
         if not self._year:

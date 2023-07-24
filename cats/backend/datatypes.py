@@ -446,6 +446,7 @@ class Feedstock():
 
         self.name = name
         self.supply = {}
+        self.limits = {}
 
     def __repr__(self):
         return self.name+str(self._upper())
@@ -469,6 +470,7 @@ class Feedstock():
     @classmethod
     def get(cls, name):
         return cls.feedstocks[name]
+
     @classmethod
     def add_feedstock(cls, name):
         try:
@@ -483,6 +485,10 @@ class Feedstock():
         quantity = validate_bounds(quantity)
 
         self.supply[price] = quantity
+
+    def add_limit(self, year, maximum):
+        maximum = validate_numeric(maximum)
+        self.limits[year] = maximum
 
     def get_cumulative(self, price):
         price = validate_numeric(price)

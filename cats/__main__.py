@@ -24,8 +24,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(prog='CATS', usage='%(prog)s [options]', description="Run the CATS model with arguments specified.")
     parser.add_argument("-t", type=str, nargs='+', help="Will generate a new template of name")
-    parser.add_argument("-v", action=argparse.BooleanOptionalAction, help="Will generate verbose results for each year run")
-    parser.add_argument("-i", action=argparse.BooleanOptionalAction, help="Will disable autoincrementation of years")
+    parser.add_argument("-v", action="store_true", help="Will generate verbose results for each year run")
+    parser.add_argument("-i", action="store_true", help="Will disable autoincrementation of years")
     args = parser.parse_args()
 
     if not os.path.isfile("config.ini"):

@@ -3,7 +3,7 @@
 # <img src="cats.png">
 
 
-# The California Transportation Supply (CATS) Model v0.1
+# The California Transportation Supply (CATS) Model v0.2
 
 
 ## About the Model
