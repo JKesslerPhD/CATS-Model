@@ -54,6 +54,12 @@ Data for each scenario must be input into the model using a `scenario_inputs.xls
 wildcard inputs so long as the naming structure is as follows: `scenario_inputs*.xlsx`.
 Ensure that only one such file is contained in a given scenario directory.  Example file name:  `scenario_inputs_BAUScenario.xlsx`
 
+Before running the model, you will need to create a config.ini file in the main CATS module folder. An example config file has been provided. This can be used as a starting point.
+
+```
+ren config_example.ini config.INITIALIZED
+```
+
 To generate a new scenario template for a scenario named `testing`, run the following:
 
 ```
